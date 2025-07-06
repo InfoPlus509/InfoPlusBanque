@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>ROLPH BANQUE</title>
+
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+  <!-- Flag Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/flag-icons/css/flag-icons.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    :root {
+      --bg: #f4f6f8;
+      --text: #333;
+      --primary: #00416A;
+      --btn: #00416A;
+      --form-bg: #fff;
+    }
+
+    body.dark {
+      --bg: #121212;
+      --text: #f1f1f1;
+      --primary: #00416A;
+      --btn: #00416A;
+      --form-bg: #1e1e1e;
+    }
+
+    h1 {
+      text-align: center;
+      font-family: sans-serif;
+      font-size: 50px;
+      color: #000;
+      margin-bottom: 20px;
+    }
+
+    body.dark h1 {
+      color: #fff;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+    }
+
+    button.menu-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--btn);
+      color: #fff;
+      border: none;
+      padding: 15px 20px;
+      margin: 10px 0;
+      font-size: 18px;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+      transition: background 0.3s ease;
+    }
+
+    button.menu-btn:hover,
+    button.menu-btn.active {
+      background: var(--primary);
+    }
+
+    .form-section {
+      background: var(--form-bg);
+      border-radius: 8px;
+      padding: 20px;
+      margin: 10px 0;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      display: none;
+      position: relative;
+    }
+
+    .form-section input,
+    .form-section select {
+      display: block;
+      width: 100%;
+      margin: 10px 0;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 16px;
+      background: transparent;
+      color: var(--text);
+    }
+
+    .form-section .date-wrapper {
+      position: relative;
+    }
+
+    .form-section .date-wrapper input {
+      padding-right: 40px;
+    }
+
+    .form-section .date-wrapper i {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #888;
+      pointer-events: none;
+    }
+
+    .form-section button {
+      background: var(--btn);
+      border: none;
+      color: #fff;
+      font-size: 16px;
+      padding: 12px 20px;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      transition: transform 0.2s, box-shadow 0.2s;
+      margin-top: 10px;
+    }
+
+    .form-section button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .password-toggle {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .password-toggle input {
+      flex: 1;
+      padding-right: 40px;
+    }
+
+    .password-toggle i {
+      position: absolute;
+      right: 12px;
+      cursor: pointer;
+      color: #888;
+      font-size: 18px;
+      user-select: none;
+    }
+
+    .phone-input {
+      display: flex;
+      align-items: center;
+    }
+
+    .phone-input select {
+      width: auto;
+      margin-right: 10px;
+    }
+
+    .compte {
+      border-top: 3px solid #e74c3c;
+      padding: 15px 0;
+      margin-top: 15px;
+      background: var(--form-bg);
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .compte strong {
+      color: var(--primary);
+    }
+
+    .notification {
+      background: #2ecc71;
+      color: #fff;
+      padding: 12px;
+      margin-top: 10px;
+      border-radius: 5px;
+      display: none;
+    }
+
+    .error {
+      background: #e74c3c;
+    }
+
+    .theme-toggle {
+      text-align: right;
+      margin-bottom: 15px;
+    }
+
+    .theme-toggle button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 24px;
+      color: var(--text);
+    }
+
+    /* Modal styles */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      display: none;
+    }
+
+    .modal-content {
+      background: var(--form-bg);
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      width: 90%;
+      max-width: 600px;
+      max-height: 80vh;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    .modal-content h3 {
+      text-align: center;
+      color: var(--primary);
+      margin-bottom: 20px;
+    }
+
+    .modal-content .close-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: var(--text);
+    }
+
+    .modal-content ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .modal-content ul li {
+      background: var(--bg);
+      margin-bottom: 10px;
+      padding: 10px;
+      border-radius: 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.9em;
+    }
+
+    .transaction-type.depot {
+      color: #2ecc71;
+      font-weight: bold;
+    }
+
+    .transaction-type.retrait {
+      color: #e74c3c;
+      font-weight: bold;
+    }
+
+    .search-options {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    .search-options input[type="radio"] {
+      display: none;
+    }
+
+    .search-options label {
+      flex: 1;
+      text-align: center;
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      cursor: pointer;
+      background-color: var(--bg);
+      color: var(--text);
+      transition: background-color 0.2s, border-color 0.2s;
+      min-width: 90px;
+    }
+
+    .search-options input[type="radio"]:checked+label {
+      background-color: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 36px;
+      }
+
+      button.menu-btn {
+        font-size: 16px;
+      }
+
+      .form-section input,
+      .form-section select {
+        font-size: 14px;
+      }
+
+      .modal-content {
+        padding: 20px;
+      }
+
+      .search-options {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="theme-toggle">
+      <button onclick="toggleTheme()"><i id="themeIcon" class="fas fa-moon"></i></button>
+    </div>
+    <h1>ROLPH BANQUE</h1>
+
+    <button class="menu-btn" data-form-id="formAjout" onclick="toggleForm('formAjout', this)"><i
+        class="fas fa-user-plus"></i> Enregistrer un compte</button>
+    <div id="formAjout" class="form-section">
+      <input id="numero" type="text" placeholder="Numéro de compte">
+      <input id="nom" type="text" placeholder="Nom">
+      <input id="prenom" type="text" placeholder="Prénom">
+      <div class="date-wrapper">
+        <input id="date_naissance" type="date" placeholder="Date de naissance">
+        <i class="fas fa-calendar-alt"></i>
+      </div>
+      <input id="lieu_naissance" type="text" placeholder="Lieu de naissance">
+      <input id="adresse" type="text" placeholder="Adresse">
+      <div class="phone-input">
+        <select id="code_pays">
+          <option value="+509" selected>🇭🇹 +509</option>
+          <option value="+33">🇫🇷 +33</option>
+          <option value="+1">🇺🇸 +1</option>
+          <option value="+44">🇬🇧 +44</option>
+        </select>
+        <input id="telephone" type="text" placeholder="Téléphone">
+      </div>
+      <div class="password-toggle">
+        <input id="motdepasse" placeholder="Mot de passe" type="password">
+        <i class="fas fa-eye" onclick="togglePassword('motdepasse', this)"></i>
+      </div>
+      <input id="solde_initial" type="number" placeholder="Solde initial">
+      <button onclick="ajouterCompte()"><i class="fas fa-save"></i> Enregistrer</button>
+    </div>
+
+    <button class="menu-btn" data-form-id="formSupprimer" onclick="toggleForm('formSupprimer', this)"><i
+        class="fas fa-user-times"></i> Supprimer un compte</button>
+    <div id="formSupprimer" class="form-section">
+      <input id="sup_numero" type="text" placeholder="Numéro de compte">
+      <div class="password-toggle">
+        <input id="sup_motdepasse" type="password" placeholder="Mot de passe">
+        <i class="fas fa-eye" onclick="togglePassword('sup_motdepasse', this)"></i>
+      </div>
+      <button onclick="supprimerCompte()"><i class="fas fa-trash-alt"></i> Supprimer</button>
+    </div>
+
+    <button class="menu-btn" data-form-id="formDepot" onclick="toggleForm('formDepot', this)"><i
+        class="fas fa-plus-circle"></i> Dépôt</button>
+    <div id="formDepot" class="form-section">
+      <input id="dep_numero" type="text" placeholder="Numéro de compte">
+      <input id="dep_montant" type="number" placeholder="Montant à déposer">
+      <div class="password-toggle">
+        <input id="dep_motdepasse" type="password" placeholder="Mot de passe">
+        <i class="fas fa-eye" onclick="togglePassword('dep_motdepasse', this)"></i>
+      </div>
+      <button onclick="depot()"><i class="fas fa-money-bill-wave"></i> Déposer</button>
+    </div>
+
+    <button class="menu-btn" data-form-id="formRetrait" onclick="toggleForm('formRetrait', this)"><i
+        class="fas fa-minus-circle"></i> Retrait</button>
+    <div id="formRetrait" class="form-section">
+      <input id="ret_numero" type="text" placeholder="Numéro de compte">
+      <input id="ret_montant" type="number" placeholder="Montant à retirer">
+      <div class="password-toggle">
+        <input id="ret_motdepasse" type="password" placeholder="Mot de passe">
+        <i class="fas fa-eye" onclick="togglePassword('ret_motdepasse', this)"></i>
+      </div>
+      <button onclick="retrait()"><i class="fas fa-wallet"></i> Retirer</button>
+    </div>
+
+    <button class="menu-btn" data-form-id="formListe" onclick="toggleForm('formListe', this)"><i
+        class="fas fa-list"></i> Liste des comptes</button>
+    <div id="formListe" class="form-section">
+      <button onclick="afficherComptes()" id="btnAfficherTous"><i class="fas fa-eye"></i> Afficher tous</button>
+      <div id="listeComptes"></div>
+    </div>
+
+    <button class="menu-btn" data-form-id="formRecherche" onclick="toggleForm('formRecherche', this)"><i
+        class="fas fa-search"></i> Rechercher un compte</button>
+    <div id="formRecherche" class="form-section">
+      <div class="search-options">
+        <input type="radio" id="searchNum" name="search_type" value="numero" checked>
+        <label for="searchNum">Numéro</label>
+        <input type="radio" id="searchNom" name="search_type" value="nom">
+        <label for="searchNom">Nom</label>
+        <input type="radio" id="searchPrenom" name="search_type" value="prenom">
+        <label for="searchPrenom">Prénom</label>
+        <input type="radio" id="searchLieu" name="search_type" value="lieu_naissance">
+        <label for="searchLieu">Lieu Naissance</label>
+        <input type="radio" id="searchAdresse" name="search_type" value="adresse">
+        <label for="searchAdresse">Adresse</label>
+      </div>
+      <input id="recherche_term" type="text" placeholder="Terme de recherche">
+      <button onclick="rechercherCompte()"><i class="fas fa-search"></i> Rechercher</button>
+      <div id="resultatsRecherche"></div>
+    </div>
+
+    <div id="notification" class="notification"></div>
+
+    <!-- Modal pour l'historique des transactions -->
+    <div id="historiqueModal" class="modal-overlay">
+      <div class="modal-content">
+        <button class="close-button" onclick="closeModal()">&times;</button>
+        <h3>Historique des transactions</h3>
+        <p>Solde initial : <span id="modalSoldeInitial"></span> HT</p>
+        <h4>Détails des transactions :</h4>
+        <ul id="transactionsList"></ul>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    let currentOpenFormId = null;
+    let operationEffectuee = false;
+
+    // Toggle affichage formulaire
+    function toggleForm(id, btn) {
+      const form = document.getElementById(id);
+      if (currentOpenFormId === id) {
+        form.style.display = 'none';
+        btn.classList.remove('active');
+        currentOpenFormId = null;
+      } else {
+        document.querySelectorAll('.form-section').forEach(f => f.style.display = 'none');
+        document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
+        form.style.display = 'block';
+        btn.classList.add('active');
+        currentOpenFormId = id;
+      }
+    }
+
+    // Afficher/cacher mot de passe
+    function togglePassword(inputId, icon) {
+      const input = document.getElementById(inputId);
+      if (input.type === "password") {
+        input.type = "text";
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+      } else {
+        input.type = "password";
+        icon.classList.add('fa-eye');
+        icon.classList.remove('fa-eye-slash');
+      }
+    }
+
+    function toggleTheme() {
+      document.body.classList.toggle('dark');
+      const icon = document.getElementById('themeIcon');
+      icon.classList.toggle('fa-moon');
+      icon.classList.toggle('fa-sun');
+    }
+
+    function getComptes() {
+      return JSON.parse(localStorage.getItem("comptes") || "[]");
+    }
+
+    function saveComptes(comptes) {
+      localStorage.setItem("comptes", JSON.stringify(comptes));
+    }
+
+    function showNotification(message, isError = false) {
+      const notif = document.getElementById('notification');
+      notif.innerText = message;
+      notif.className = 'notification';
+      if (isError) notif.classList.add('error');
+      notif.style.display = 'block';
+      setTimeout(() => notif.style.display = 'none', 3000);
+    }
+
+    function clearFields(ids) {
+      ids.forEach(id => {
+        const elem = document.getElementById(id);
+        if (elem) elem.value = '';
+      });
+      document.getElementById("code_pays").value = "+509";
+    }
+
+    function validerFormAjout() {
+      const fields = [
+        "numero",
+        "nom",
+        "prenom",
+        "date_naissance",
+        "lieu_naissance",
+        "adresse",
+        "telephone",
+        "motdepasse",
+        "solde_initial"
+      ];
+      for (let id of fields) {
+        const value = document.getElementById(id).value.trim();
+        if (value === "") return false;
+      }
+      return true;
+    }
+
+    function ajouterCompte() {
+      if (!validerFormAjout()) {
+        showNotification("Veuillez remplir tous les champs", true);
+        return;
+      }
+
+      const comptes = getComptes();
+      const numero = document.getElementById("numero").value.trim();
+
+      if (comptes.find(c => c.numero === numero)) {
+        showNotification("❌ Ce numéro existe déjà !", true);
+        return;
+      }
+
+      const soldeInitial = parseFloat(document.getElementById("solde_initial").value);
+      if (isNaN(soldeInitial) || soldeInitial < 0) {
+        showNotification("❌ Le solde initial doit être un nombre positif !", true);
+        return;
+      }
+
+      const now = new Date();
+      const compte = {
+        numero: numero,
+        nom: document.getElementById("nom").value.trim(),
+        prenom: document.getElementById("prenom").value.trim(),
+        date_naissance: document.getElementById("date_naissance").value.trim(),
+        lieu_naissance: document.getElementById("lieu_naissance").value.trim(),
+        adresse: document.getElementById("adresse").value.trim(),
+        telephone: document.getElementById("code_pays").value + document.getElementById("telephone").value.trim(),
+        motdepasse: document.getElementById("motdepasse").value.trim(),
+        solde: soldeInitial,
+        solde_initial_creation: soldeInitial,
+        transactions: [{
+          type: "Initial",
+          montant: soldeInitial,
+          date: now.toLocaleString('fr-FR')
+        }]
+      };
+
+      comptes.push(compte);
+      saveComptes(comptes);
+
+      clearFields([
+        "numero",
+        "nom",
+        "prenom",
+        "date_naissance",
+        "lieu_naissance",
+        "adresse",
+        "telephone",
+        "motdepasse",
+        "solde_initial"
+      ]);
+
+      showNotification("✅ Compte enregistré !");
+      operationEffectuee = true;
+      updateBoutonAfficherTous();
+    }
+
+    // Blocage et mot de passe
+    function estCompteBloque(compte) {
+      if (!compte.blocage) return false;
+      const now = Date.now();
+      const blocageTimestamp = compte.blocage.timestamp;
+      const diff = now - blocageTimestamp;
+      if (diff >= 86400000) {
+        delete compte.blocage;
+        saveComptes(getComptes());
+        return false;
+      }
+      return true;
+    }
+
+    function enregistrerTentativeErreur(compte) {
+      if (!compte.blocage) {
+        compte.blocage = { erreurs: 1, timestamp: Date.now() };
+      } else {
+        compte.blocage.erreurs++;
+        if (compte.blocage.erreurs >= 3) {
+          compte.blocage.timestamp = Date.now();
+        }
+      }
+      saveComptes(getComptes());
+    }
+
+    function reinitialiserTentatives(compte) {
+      if (compte.blocage) {
+        delete compte.blocage;
+        saveComptes(getComptes());
+      }
+    }
+
+    function verifierMotDePasse(compte, mdpSaisi) {
+      if (estCompteBloque(compte)) {
+        const reste = 24 - Math.floor((Date.now() - compte.blocage.timestamp) / 3600000);
+        showNotification(`❌ Compte bloqué suite à 3 tentatives erronées. Réessayez dans ${reste} heure(s).`, true);
+        return false;
+      }
+      if (compte.motdepasse !== mdpSaisi) {
+        enregistrerTentativeErreur(compte);
+        const tentativesRestantes = 3 - (compte.blocage ? compte.blocage.erreurs : 1);
+        if (tentativesRestantes > 0) {
+          showNotification(`❌ Mot de passe incorrect. Il vous reste ${tentativesRestantes} tentative(s).`, true);
+        } else {
+          showNotification(`❌ Compte bloqué suite à 3 tentatives erronées. Réessayez dans 24 heures.`, true);
+        }
+        return false;
+      }
+      reinitialiserTentatives(compte);
+      return true;
+    }
+
+    // Suppression compte
+    function supprimerCompte() {
+      const numero = document.getElementById("sup_numero").value.trim();
+      const mdp = document.getElementById("sup_motdepasse").value.trim();
+
+      if (!numero || !mdp) {
+        showNotification("❌ Veuillez remplir tous les champs.", true);
+        return;
+      }
+
+      let comptes = getComptes();
+      const compte = comptes.find(c => c.numero === numero);
+
+      if (!compte) {
+        showNotification("❌ Compte introuvable !", true);
+        return;
+      }
+
+      if (!verifierMotDePasse(compte, mdp)) return;
+
+      comptes = comptes.filter(c => c.numero !== numero);
+      saveComptes(comptes);
+      document.getElementById("sup_numero").value = '';
+      document.getElementById("sup_motdepasse").value = '';
+      showNotification("✅ Compte supprimé !");
+      operationEffectuee = true;
+      updateBoutonAfficherTous();
+    }
+
+    // Dépôt
+    function depot() {
+      const numero = document.getElementById("dep_numero").value.trim();
+      const montant = parseFloat(document.getElementById("dep_montant").value);
+      const mdp = document.getElementById("dep_motdepasse").value.trim();
+
+      if (!numero || !mdp || isNaN(montant)) {
+        showNotification("❌ Veuillez remplir tous les champs correctement.", true);
+        return;
+      }
+
+      const comptes = getComptes();
+      const compte = comptes.find(c => c.numero === numero);
+
+      if (!compte) {
+        showNotification("❌ Compte introuvable !", true);
+        return;
+      }
+
+      if (!verifierMotDePasse(compte, mdp)) return;
+
+      if (montant < 500) {
+        showNotification("❌ Le montant minimum de dépôt est de 500 HT.", true);
+        return;
+      }
+      if (montant > 1000000) {
+        showNotification("❌ Le montant maximum de dépôt est de 1 000 000 HT.", true);
+        return;
+      }
+
+      compte.solde += montant;
+      const now = new Date();
+      compte.transactions.push({
+        type: "Dépôt",
+        montant: montant,
+        date: now.toLocaleString('fr-FR')
+      });
+      saveComptes(comptes);
+      document.getElementById("dep_numero").value = '';
+      document.getElementById("dep_montant").value = '';
+      document.getElementById("dep_motdepasse").value = '';
+      showNotification(`✅ Dépôt effectué. Nouveau solde : ${compte.solde.toFixed(2)} HT`);
+      operationEffectuee = true;
+      updateBoutonAfficherTous();
+    }
+
+    // Retrait
+    function retrait() {
+      const numero = document.getElementById("ret_numero").value.trim();
+      const montant = parseFloat(document.getElementById("ret_montant").value);
+      const mdp = document.getElementById("ret_motdepasse").value.trim();
+
+      if (!numero || !mdp || isNaN(montant)) {
+        showNotification("❌ Veuillez remplir tous les champs correctement.", true);
+        return;
+      }
+
+      const comptes = getComptes();
+      const compte = comptes.find(c => c.numero === numero);
+
+      if (!compte) {
+        showNotification("❌ Compte introuvable !", true);
+        return;
+      }
+
+      if (!verifierMotDePasse(compte, mdp)) return;
+
+      if (montant < 500) {
+        showNotification("❌ Le montant minimum de retrait est de 500 HT.", true);
+        return;
+      }
+      if (montant > 500000) {
+        showNotification("❌ Le montant maximum de retrait est de 500 000 HT.", true);
+        return;
+      }
+
+      // Calcul total retraits 24h
+      const now = Date.now();
+      const limite24h = 24 * 60 * 60 * 1000;
+      let totalRetraits24h = 0;
+      if (compte.transactions && compte.transactions.length > 0) {
+        compte.transactions.forEach(t => {
+          if (t.type === "Retrait") {
+            const dateT = new Date(t.date);
+            if (now - dateT.getTime() <= limite24h) {
+              totalRetraits24h += Math.abs(t.montant);
+            }
+          }
+        });
+      }
+
+      if (totalRetraits24h + montant > 500000) {
+        showNotification(`❌ Plafond de retrait sur 24h dépassé. Vous avez déjà retiré ${totalRetraits24h.toFixed(2)} HT aujourd'hui.`, true);
+        return;
+      }
+
+      if (compte.solde < montant) {
+        showNotification("❌ Solde insuffisant !", true);
+        return;
+      }
+
+      compte.solde -= montant;
+      compte.transactions.push({
+        type: "Retrait",
+        montant: -montant,
+        date: new Date().toLocaleString('fr-FR')
+      });
+      saveComptes(comptes);
+      document.getElementById("ret_numero").value = '';
+      document.getElementById("ret_montant").value = '';
+      document.getElementById("ret_motdepasse").value = '';
+      showNotification(`✅ Retrait effectué. Nouveau solde : ${compte.solde.toFixed(2)} HT`);
+      operationEffectuee = true;
+      updateBoutonAfficherTous();
+    }
+
+    // Affichage comptes
+    function afficherComptes() {
+      const comptes = getComptes();
+      const liste = document.getElementById("listeComptes");
+      renderComptesList(comptes, liste);
+    }
+
+    // Recherche multi-critères
+    function rechercherCompte() {
+      const searchTerm = document.getElementById("recherche_term").value.trim().toLowerCase();
+      const searchType = document.querySelector('input[name="search_type"]:checked').value;
+      const comptes = getComptes();
+      const resultatsDiv = document.getElementById("resultatsRecherche");
+
+      if (searchTerm === "") {
+        resultatsDiv.innerHTML = "<p>Veuillez entrer un terme de recherche.</p>";
+        return;
+      }
+
+      let resultats = [];
+      if (searchType === 'numero') {
+        resultats = comptes.filter(c => c.numero.toLowerCase().includes(searchTerm));
+      } else if (searchType === 'nom') {
+        resultats = comptes.filter(c => c.nom.toLowerCase().includes(searchTerm));
+      } else if (searchType === 'prenom') {
+        resultats = comptes.filter(c => c.prenom.toLowerCase().includes(searchTerm));
+      } else if (searchType === 'lieu_naissance') {
+        resultats = comptes.filter(c => c.lieu_naissance.toLowerCase().includes(searchTerm));
+      } else if (searchType === 'adresse') {
+        resultats = comptes.filter(c => c.adresse.toLowerCase().includes(searchTerm));
+      }
+
+      renderComptesList(resultats, resultatsDiv);
+    }
+
+    // Rendu liste comptes
+    function renderComptesList(comptesToRender, targetElement) {
+      if (comptesToRender.length === 0) {
+        targetElement.innerHTML = "<p>Aucun compte trouvé.</p>";
+        return;
+      }
+
+      let html = '';
+      comptesToRender.forEach(c => {
+        html += `<div class="compte">
+          <p><strong>Numéro :</strong> ${c.numero}</p>
+          <p><strong>Nom :</strong> ${c.nom}</p>
+          <p><strong>Prénom :</strong> ${c.prenom}</p>
+          <p><strong>Date Naiss. :</strong> ${c.date_naissance}</p>
+          <p><strong>Lieu :</strong> ${c.lieu_naissance}</p>
+          <p><strong>Adresse :</strong> ${c.adresse}</p>
+          <p><strong>Téléphone :</strong> ${c.telephone}</p>
+          <p><strong>Solde Actuel :</strong> ${c.solde.toFixed(2)} HT</p>
+          <button onclick="afficherHistorique('${c.numero}')"><i class="fas fa-history"></i> Historique de transaction</button>
+        </div>`;
+      });
+      targetElement.innerHTML = html;
+    }
+
+    // Affichage historique
+    function afficherHistorique(numeroCompte) {
+      const comptes = getComptes();
+      const compte = comptes.find(c => c.numero === numeroCompte);
+
+      if (!compte) {
+        showNotification("❌ Compte introuvable pour l'historique !", true);
+        return;
+      }
+
+      document.getElementById('modalSoldeInitial').innerText = compte.solde_initial_creation.toFixed(2);
+      const transactionsList = document.getElementById('transactionsList');
+      transactionsList.innerHTML = '';
+
+      if (compte.transactions && compte.transactions.length > 0) {
+        compte.transactions.forEach(t => {
+          const listItem = document.createElement('li');
+          const typeClass = t.type === "Dépôt" ? "depot" : (t.type === "Retrait" ? "retrait" : "");
+          listItem.innerHTML = `
+            <span class="transaction-type ${typeClass}">${t.type}</span>
+            <span>${t.montant.toFixed(2)} HT</span>
+            <span>${t.date}</span>
+          `;
+          transactionsList.appendChild(listItem);
+        });
+      } else {
+        transactionsList.innerHTML = '<li>Aucune transaction enregistrée pour ce compte.</li>';
+      }
+
+      document.getElementById('historiqueModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('historiqueModal').style.display = 'none';
+    }
+
+    // Bouton Afficher tous / Rafraîchir
+    function updateBoutonAfficherTous() {
+      const btn = document.getElementById('btnAfficherTous');
+      if (operationEffectuee) {
+        btn.innerHTML = '<i class="fas fa-sync-alt"></i> Rafraîchir';
+        btn.onclick = () => {
+          afficherComptes();
+          operationEffectuee = false;
+          btn.innerHTML = '<i class="fas fa-eye"></i> Afficher tous';
+          btn.onclick = afficherComptes;
+        };
+      }
+    }
+  </script>
+</body>
+
+</html>
